@@ -159,10 +159,6 @@ foreach(var item in items)
 }
 ```
 
-From database only select data which will be used. There is no need to fetch whole object unless you are going to update it.
-
-Avoid using `Include`. Use `Select` instead.
-
 When creating new object instance in Select, add `new` keyword and class name to new line and indent it one `tab` more than `Select`.
 
 Example: Fetch Blog name and Author name.
@@ -203,7 +199,15 @@ var blogData = await dbContetxt.Blogs
     .ToListAsync();
 ```  
 
+From database only select data which will be used. There is no need to fetch whole object unless you are going to update it.
+
+Avoid using `Include`. Use `Select` instead.
+
+Do not use `Single` when fetching entities by their `primary key` from database.
+
 ## Layout conventions
+
+Use file scoped namespaces.
 
 Write only one statement per line.
 
@@ -307,6 +311,28 @@ if (y != 0)
 }
 ```
 
+Avoid using `else`. Always `return` before if possible.
+
+```C#
+// bad
+if (someCondition) 
+{
+    // Some code
+} 
+else 
+{
+   // More code
+}
+
+if (someCondition)
+{
+    // Some code
+    return;
+}
+
+// More code
+```
+
 If a single statement must include a long chain or nested tree of sub-statements, split the line as follows:
 
     1.Place operators at the beginning of lines rather than the end of the previous line.
@@ -334,6 +360,12 @@ var blogsWithPostRatingHigherThanThree = blogs
     .Where(x => x.Posts
     .Any(y => y.Rating > 3))
     .ToList();
+
+// bad
+var blogsWithPostRatingHigherThanThree = blogs
+                                    .Where(x => x.Posts
+                                        .Any(y => y.Rating > 3))
+                                    .ToList();
     
 // good
 var blogsWithPostRatingHigherThanThree = blogs
@@ -341,6 +373,41 @@ var blogsWithPostRatingHigherThanThree = blogs
         .Any(y => y.Rating > 3))
     .ToList();
 ```
+Create variables when you need them.
+
+## MediatR conventions
+
+Use only one `SaveChanges` in handler.
+
+Services should not call `SaveChanges`. Handler should save all changes created in services.
+
+Throw exceptions instead of returning error codes or null in handler. 
+
+Always validate request.
+
+
+Place `Handler`, `Request` and `Response` in the same file.  
+Example: `UpdateBlogNameHandler.cs` file
+
+```C#
+namespace Core.Handlers.Blog;
+
+public class UpdateBlogNameHandler : RequestHandler<UpdateBlogNameRequest, UpdateBlogNameResponse>
+{
+    ...
+}
+
+public class UpdateBlogNameRequest
+{
+    ...
+}
+
+public class UpdateBlogNameResponse
+{
+    ...
+}
+```
+
 
 ## Braces
 
@@ -359,6 +426,24 @@ var person = new Person
     Name = "Name" 
 };
 ```
+When creating object, assing all properties in object initilaizer.
+
+```C#
+// bad
+var blog = new Blog
+{
+    Name = "blogName"
+};
+
+blog.Rating = 5;
+
+// good
+var blog = new Blog
+{
+    Name = "blogName",
+    Rating = 5
+}
+```
 
 Use `braces` around statements with control flow keywords (`if`, `else`, `while`, `for`, `foreach`), even if statement block is one line.
 
@@ -372,6 +457,9 @@ if (x > 10)
     return;
 }
 ```
+
+## Other
+Always use implicit typing (`var`) for local variables.
 
 When you have complicated expression in if statement, it is better to add this expression to the varibale and name this variable accordingly.
 
@@ -408,8 +496,77 @@ foreach(var number in filteredList)
     ...
 }
 ```
-## Other
-Use implicit typing (`var`) for local variables when the type of the variable is obvious from the right side of the assignment, or when the precise type is not important.
 
-Throw exceptions instead of returning error codes or null. No function should return an error code or a null value. If the function cannot satisfy its contract, throw an exception.
+Alawys use `IOptions` to provide strongly typed access to groups of related settings.
 
+`appsetting,json`
+```C#
+{
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  },
+  "MySettings": {
+    "StringSetting": "My Value",
+    "IntSetting": 23 
+  }
+}
+
+public class MySettings
+{
+    public string StringSetting { get; set; }
+    public int IntSetting { get; set; }
+}
+```
+In service configuration just add:
+```C#
+public static class ServiceConfiguration
+{
+    public static void AddServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        var section = configuration.GetSection("MySettings");
+        services.Configure<MySettings>(section);
+    }
+}
+```
+
+Add changes to database context before calling `SaveChanges`.
+
+Avoid using helper lists. Use `Select` or method with `yield return` insted.
+
+```C#
+// bad
+var blogsData = new List<BlogData>();
+
+foreach (var blog in blogs)
+{
+    var blogData = new BlogData
+    {
+        Name = blog.Name,
+        Rating = blog.Rating
+    };
+
+    blogsData.Add(blogData);
+}
+
+// good
+var blogsData = blogs
+    .Select(x =>
+        new BlogData
+        {
+            Name = blog.Name,
+            Rating = blog.Rating
+        }
+    )
+    .ToList();
+```
+
+Do not add meanignless comments.
+```C#
+/// <param name="userData">data for new user</param>
+/// <returns>success result</returns>
+```
