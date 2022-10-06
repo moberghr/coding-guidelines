@@ -567,6 +567,6 @@ var blogsData = blogs
 
 Do not add meanignless comments.
 ```C#
-/// <param name="userData">data for new user</param>
+/// <param name="blogData">data for new blog</param>
 /// <returns>success result</returns>
 ```
