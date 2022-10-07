@@ -6,6 +6,15 @@
 Avoid using **abbreviations**.  
 **Exceptions**: abbreviations commonly used as names, such as **Id**, **Xml**, **Uri**.
 
+When using acronyms only first letter is uppercase.
+```C#
+// bad
+var personOIB = 01234567891;
+
+// good
+var personOib = 19876543210;
+```
+
 ### Class Names
 Use `PascalCasing` for class names and method names.
 
@@ -363,9 +372,9 @@ var blogsWithPostRatingHigherThanThree = blogs
 
 // bad
 var blogsWithPostRatingHigherThanThree = blogs
-                                    .Where(x => x.Posts
-                                        .Any(y => y.Rating > 3))
-                                    .ToList();
+                                        .Where(x => x.Posts
+                                            .Any(y => y.Rating > 3))
+                                        .ToList();
     
 // good
 var blogsWithPostRatingHigherThanThree = blogs
@@ -502,14 +511,6 @@ Alawys use `IOptions` to provide strongly typed access to groups of related sett
 `appsetting,json`
 ```C#
 {
-  "Logging": {
-    "IncludeScopes": false,
-    "LogLevel": {
-      "Default": "Debug",
-      "System": "Information",
-      "Microsoft": "Information"
-    }
-  },
   "MySettings": {
     "StringSetting": "My Value",
     "IntSetting": 23 
@@ -534,7 +535,37 @@ public static class ServiceConfiguration
 }
 ```
 
-Add changes to database context before calling `SaveChanges`.
+Injecting in class:
+```C#
+public class Example
+{
+    private readonly MySettings _options;
+
+    public Example(IOptions<MySettings> options)
+    {
+        _options = optoins.Value;
+    }
+}
+```
+
+Add changes to database context just before calling `SaveChanges`.
+```C#
+// bad
+await context.Blogs.AddAsync(blog);
+
+var x = 10;
+
+await context.SaveChangesAsync();
+```
+
+```C#
+//good
+
+var x = 10;
+
+await context.Blogs.AddAsync(blog);
+await context.SaveChangesAsync();
+```
 
 Avoid using helper lists. Use `Select` or method with `yield return` insted.
 
@@ -560,13 +591,12 @@ var blogsData = blogs
         {
             Name = blog.Name,
             Rating = blog.Rating
-        }
-    )
+        })
     .ToList();
 ```
 
 Do not add meanignless comments.
 ```C#
-/// <param name="blogData">data for new blog</param>
+/// <param name="itemData">data for new item</param>
 /// <returns>success result</returns>
 ```
