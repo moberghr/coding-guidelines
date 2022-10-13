@@ -224,6 +224,68 @@ Write only one declaration per line.
 
 If continuation lines are not indented automatically, indent them one tab (four spaces).
 
+Use compound assignment.
+
+```C#
+// bad
+x = x + 5;
+
+// good
+x += 5;
+```
+
+Match namespaces to folder structure.
+```C#
+// bad
+// file path: Example/Convention/C.cs
+using System;
+
+namespace Example
+{
+    class C
+    {
+    }
+}
+
+// good
+// file path: Example/Convention/C.cs
+using System;
+
+namespace Example.Convention
+{
+    class C
+    {
+    }
+}
+```
+
+Prefer `using` directives to be placed outside the namespace.
+
+Use simple `using` declaration over `using` statement with curly braces.
+```C#
+// bad
+using (var a = b) 
+{
+    ...
+}
+
+// good 
+using var a = b;
+```
+
+Sort `System.*` `using` directives alphabetically, and place them before other using directives.
+```C#
+// bad
+using System.Collections.Generic;
+using Octokit;
+using System.Threading.Tasks;
+
+// good
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Octokit;
+```
+
 Leave one blank line before return statement in method.
 
 ```C#
@@ -252,6 +314,39 @@ public int ReverseInteger(int number)
 
     return reversedNumber;
 }
+```
+
+`Never` use 2 empty lines in a row.
+
+```C#
+// bad
+public int ReverseInteger(int number)
+{
+    var reversedNumber = 0;
+    while (num > 0) 
+    {
+        reversedNumber = result * 10 + num % 10;
+        num /= 10;
+    }
+
+
+    return reversedNumber;
+}
+
+// good
+public int ReverseInteger(int number)
+{
+    var reversedNumber = 0;
+
+    while (num > 0) 
+    {
+       reversedNumber = result * 10 + num % 10;
+       num /= 10;
+    }
+
+    return reversedNumber;
+}
+
 ```
 
 Private methods should be last in file.
@@ -599,4 +694,62 @@ Do not add meanignless comments.
 ```C#
 /// <param name="itemData">data for new item</param>
 /// <returns>success result</returns>
+```
+
+Prefer null coalescing expressions to ternary operator checking.
+
+```C#
+// bad
+var v = x != null ? x : y; // or
+var v = x == null ? y : x;
+
+// good
+var v = x ?? y;
+```
+
+Prefer assignments and return statements to use a ternary conditional, over if-else statement.
+
+```C#
+// bad
+string s;
+if (expr)
+{
+    s = "hello";
+}
+else
+{
+    s = "world";
+}
+
+// good
+var s = expr ? "hello" : "world";
+```
+
+Prefer simplified conditional expressions.
+```C#
+// bad
+var result1 = M1() && M2() ? true : false;
+var result2 = M1() ? true : M2();
+
+// good
+var result1 = M1() && M2();
+var result2 = M1() || M2();
+```
+
+Prefer simplified interpolated strings.
+```C#
+// bad
+var str = $"prefix {someValue.ToString()} suffix";
+
+// good
+var str = $"prefix {someValue} suffix";
+```
+
+Prefer fields **not** to be prefaced with `this.`.
+```C#
+// bad 
+this._capacity = 0;
+
+// good
+_capacity = 0;
 ```
