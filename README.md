@@ -240,22 +240,20 @@ Match namespaces to folder structure.
 // file path: Example/Convention/C.cs
 using System;
 
-namespace Example
+namespace Example;
+
+class C
 {
-    class C
-    {
-    }
 }
 
 // good
 // file path: Example/Convention/C.cs
 using System;
 
-namespace Example.Convention
+namespace Example.Convention;
+
+class C
 {
-    class C
-    {
-    }
 }
 ```
 
