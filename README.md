@@ -413,26 +413,26 @@ if (y != 0)
 }
 ```
 
-Avoid using `else`. Always `return` before if possible.
+Avoid using `else`. Always `return` before if possible. This reduces nesting and makes to code easier to follow.
 
 ```C#
 // bad
-if (someCondition) 
+if (isValid) 
 {
-    // Some code
+    // Some code, happy path goes here
 } 
 else 
 {
-   // More code
+   return; // or throw new Exception("not valid");
 }
 
-if (someCondition)
+// good
+if (!isValid)
 {
-    // Some code
-    return;
+   return; // or throw new Exception("not valid");
 }
 
-// More code
+// Some code, happy path goes here
 ```
 
 If a single statement must include a long chain or nested tree of sub-statements, split the line as follows:
