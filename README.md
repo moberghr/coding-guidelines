@@ -10,12 +10,12 @@
   - [Abbreviations and acronyms](#abbreviations-and-acronyms)
 - [Lambda expressions](#lambda-expressions)
 
-  - [Paramtere names](#paramtere-names)
-  - [Split chained methods with lamda expressions in seperate line](#split-chained-methods-with-lamda-expressions-in-seperate-line)
+  - [Parameter names](#paramtere-names)
+  - [Split chained methods with lambda expressions in separate line](#split-chained-methods-with-lambda-expressions-in-separate-line)
   - [LINQ conventions](#linq-conventions)
     - [Use meaningful names for query variables](#use-meaningful-names-for-query-variables)
     - [Separate multiple `&&` from one `Where` statement in multiple `Where` statements.](#separate-multiple--from-one-where-statement-in-multiple-where-statements)
-    - [ Use `Where` statement insted of writing condition in `Single`, or `First`](#use-where-statement-insted-of-writing-condition-in-single-or-first)
+    - [ Use `Where` statement instead of writing condition in `Single`, or `First`](#use-where-statement-instead-of-writing-condition-in-single-or-first)
     - [ Prefer using `async` LINQ query when querying database](#prefer-using-async-linq-query-when-querying-database))
     - [Prefer using foreach loop over LINQ foreach](#prefer-using-foreach-loop-over-linq-foreach)
     - [Place `new` keyword in new line](#place-new-keyword-in-new-line)
@@ -47,11 +47,11 @@
   - [Always use implicit typing (`var`) for local variables](#always-use-implicit-typing-var-for-local-variables)
   - [Extract complicated expression to a variable](#extract-complicated-expression-to-a-variable)
   - [Use `foreach` loop over `for` loop when is possible](#use-foreach-loop-over-for-loop-when-is-possible)
-  - [Avoid initalizing collections in loops(`for`, `foreach`, `while`)](#avoid-initalizing-collections-in-loopsfor-foreach-while)
+  - [Avoid initializing collections in loops(`for`, `foreach`, `while`)](#avoid-initializing-collections-in-loopsfor-foreach-while)
   - [IOptions](#ioptions)
-  - [ Add changes to database context just before calling `SaveChanges`](#add-changes-to-database-context-just-before-calling-savechanges)
+  - [Add changes to database context just before calling `SaveChanges`](#add-changes-to-database-context-just-before-calling-savechanges)
   - [Avoid using helper lists](#avoid-using-helper-lists)
-  - [Do not add meanignless comments](#do-not-add-meanignless-comments)
+  - [Do not add meaningless comments](#do-not-add-meaningless-comments)
   - [Prefer null coalescing expressions to ternary operator checking](#prefer-null-coalescing-expressions-to-ternary-operator-checking)
   - [Prefer assignments and return statements to use a ternary conditional, over if-else statement](#prefer-assignments-and-return-statements-to-use-a-ternary-conditional-over-if-else-statement)
   - [Prefer simplified conditional expressions](#prefer-simplified-conditional-expressions)
@@ -86,7 +86,7 @@ public interface IExampleInterface
 
 ### Variable Names
 
-Use `camelCasing` when naming local variables and method argumetns.
+Use `camelCasing` when naming local variables and method arguments.
 
 ```C#
 public class Example
@@ -98,7 +98,7 @@ public class Example
 }
 ```
 
-Use `camelCasing` when naming `private` or interal fields, and prefix them with `_`.
+Use `camelCasing` when naming `private` or internal fields, and prefix them with `_`.
 
 ```C#
 public class Example
@@ -150,7 +150,7 @@ var personOib = 19876543210;
 
 Use letter `x` as parameter name for lambda expressions.
 
-If you have nested lambdas, in inner lamdas use letters `y` and `z`.
+If you have nested lambdas, in inner lambdas use letters `y` and `z`.
 
 ```C#
 // bad
@@ -166,7 +166,7 @@ var blogsWithPostRatingHigherThanThree = blogs
     .ToList();
 ```
 
-### Split chained methods with lamda expressions in seperate line
+### Split chained methods with lambda expressions in separate line
 
 If you invoke a chain of methods with lambda expressions, split each invocation onto its own line.
 
@@ -207,7 +207,7 @@ var filteredNumbers = numbers
     .ToList();
 ```
 
-#### Use `Where` statement insted of writing condition in `Single`, or `First`.
+#### Use `Where` statement instead of writing condition in `Single`, or `First`.
 
 ```C#
 // bad
@@ -446,7 +446,6 @@ public int ReverseInteger(int number)
         num /= 10;
     }
 
-
     return reversedNumber;
 }
 
@@ -682,7 +681,7 @@ var person = new Person
 };
 ```
 
-When creating object, assing all properties in object initilaizer.
+When creating object, assign all properties in object initializer.
 
 ```C#
 // bad
@@ -720,7 +719,7 @@ if (x > 10)
 
 ### Extract complicated expression to a variable
 
-When you have complicated expression in if statement, it is better to add this expression to the varibale and name this variable accordingly.
+When you have complicated expression in if statement, it is better to add this expression to the variable and name this variable accordingly.
 
 ```C#
 var list1AndList2ContainsSameElements = !list1.Except(list2).Any()
@@ -734,7 +733,7 @@ if (list1AndList2ContainsSameElements)
 
 ### Use `foreach` loop over `for` loop when is possible
 
-### Avoid initalizing collections in loops(`for`, `foreach`, `while`)
+### Avoid initializing collections in loops(`for`, `foreach`, `while`)
 
 ```C#
 // bad
@@ -758,7 +757,7 @@ foreach(var number in filteredList)
 
 ### IOptions
 
-Alawys use `IOptions` to provide strongly typed access to groups of related settings.
+Always use `IOptions` to provide strongly typed access to groups of related settings.
 
 `appsetting,json`
 
@@ -826,7 +825,7 @@ await context.SaveChangesAsync();
 
 ### Avoid using helper lists
 
-Use `Select` or method with `yield return` insted.
+Use `Select` or method with `yield return` instead.
 
 ```C#
 // bad
@@ -854,7 +853,7 @@ var blogsData = blogs
     .ToList();
 ```
 
-### Do not add meanignless comments
+### Do not add meaningless comments
 
 ```C#
 /// <param name="itemData">data for new item</param>
