@@ -1,21 +1,68 @@
-
 # Coding style
+
+## Summary
+
+- [Naming conventions](#naming-conventions)
+  - [Class names](#class-names)
+  - [Interfaces](#interfaces)
+  - [Variable names](#variable-names)
+  - [Route names](#route-names)
+  - [Abbreviations and acronyms](#abbreviations-and-acronyms)
+- [Lambda expressions](#lambda-expressions)
+
+  - [Parameter names](#paramtere-names)
+  - [Split chained methods with lambda expressions in separate line](#split-chained-methods-with-lambda-expressions-in-separate-line)
+  - [LINQ conventions](#linq-conventions)
+    - [Use meaningful names for query variables](#use-meaningful-names-for-query-variables)
+    - [Separate multiple `&&` from one `Where` statement in multiple `Where` statements.](#separate-multiple--from-one-where-statement-in-multiple-where-statements)
+    - [ Use `Where` statement instead of writing condition in `Single`, or `First`](#use-where-statement-instead-of-writing-condition-in-single-or-first)
+    - [ Prefer using `async` LINQ query when querying database](#prefer-using-async-linq-query-when-querying-database))
+    - [Prefer using foreach loop over LINQ foreach](#prefer-using-foreach-loop-over-linq-foreach)
+    - [Place `new` keyword in new line](#place-new-keyword-in-new-line)
+    - [From database only select data which will be used](#from-database-only-select-data-which-will-be-used)
+    - [Do not use `Single` when fetching entities by their `primary key` from database](#do-not-use-single-when-fetching-entities-by-their-primary-key-from-database)
+
+- [Layout conventions](#layout-conventions)
+  - [Use file scoped namespaces](#use-file-scoped-namespaces)
+  - [Write only one statement per line](#write-only-one-statement-per-line)
+  - [Write only one declaration per line](#write-only-one-declaration-per-line)
+  - [Use compound assignment](#use-compound-assignment)
+  - [Match namespaces to folder structure](#match-namespaces-to-folder-structure)
+  - [`using` directives](#using-directives)
+  - [Use simple `using` declaration over `using` statement with curly braces](#use-simple-using-declaration-over-using-statement-with-curly-braces)
+  - [Leave one blank line before return statement in method](#leave-one-blank-line-before-return-statement-in-method)
+  - [Never use 2 empty lines in a row](#never-use-2-empty-lines-in-a-row)
+  - [Private methods should be last in file](#private-methods-should-be-last-in-file)
+  - [Separate type members and methods with a single blank line, except private fields](#separate-type-members-and-methods-with-a-single-blank-line-except-private-fields)
+  - [Separate code into logically-related blocks](#separate-code-into-logically-related-blocks)
+  - [Avoid using `else`](#avoid-using-else)
+  - [Indentation](#indentation)
+  - [Create variables when you need them](#create-variables-when-you-need-them)
+- [MediatR conventions](#mediatr-conventions)
+  - [Use only one `SaveChanges` in handler](#use-only-one-savechanges-in-handler)
+  - [Always validate request](#always-validate-request)
+  - [Place `Handler`, `Request` and `Response` in the same file](#place-handler-request-and-response-in-the-same-file)
+- [Braces](#braces)
+- [Other](#other)
+  - [Always use implicit typing (`var`) for local variables](#always-use-implicit-typing-var-for-local-variables)
+  - [Extract complicated expression to a variable](#extract-complicated-expression-to-a-variable)
+  - [Use `foreach` loop over `for` loop when is possible](#use-foreach-loop-over-for-loop-when-is-possible)
+  - [Avoid initializing collections in loops(`for`, `foreach`, `while`)](#avoid-initializing-collections-in-loopsfor-foreach-while)
+  - [IOptions](#ioptions)
+  - [Add changes to database context just before calling `SaveChanges`](#add-changes-to-database-context-just-before-calling-savechanges)
+  - [Avoid using helper lists](#avoid-using-helper-lists)
+  - [Do not add meaningless comments](#do-not-add-meaningless-comments)
+  - [Prefer null coalescing expressions to ternary operator checking](#prefer-null-coalescing-expressions-to-ternary-operator-checking)
+  - [Prefer assignments and return statements to use a ternary conditional, over if-else statement](#prefer-assignments-and-return-statements-to-use-a-ternary-conditional-over-if-else-statement)
+  - [Prefer simplified conditional expressions](#prefer-simplified-conditional-expressions)
+  - [Prefer simplified interpolated strings](#prefer-simplified-interpolated-strings)
+  - [Prefer fields not to be prefaced with `this.`](#prefer-fields-not-to-be-prefaced-with-this)
+  - [Git branch naming](#git-branch-naming)
 
 ## Naming conventions
 
-Avoid using **abbreviations**.  
-**Exceptions**: abbreviations commonly used as names, such as **Id**, **Xml**, **Uri**.
-
-When using acronyms only first letter is uppercase.
-```C#
-// bad
-var personOIB = 01234567891;
-
-// good
-var personOib = 19876543210;
-```
-
 ### Class Names
+
 Use `PascalCasing` for class names and method names.
 
 ```C#
@@ -28,6 +75,7 @@ public class Example
 ```
 
 ### Interfaces
+
 Use `PascalCasing` for interface name and prefix the name with an `I`.
 
 ```C#
@@ -37,7 +85,8 @@ public interface IExampleInterface
 ```
 
 ### Variable Names
-Use `camelCasing` when naming local variables and method argumetns.
+
+Use `camelCasing` when naming local variables and method arguments.
 
 ```C#
 public class Example
@@ -48,7 +97,8 @@ public class Example
     }
 }
 ```
-Use `camelCasing` when naming `private` or interal fields, and prefix them with `_`.
+
+Use `camelCasing` when naming `private` or internal fields, and prefix them with `_`.
 
 ```C#
 public class Example
@@ -64,7 +114,6 @@ public class Example
 
 Use `PascalCasing` when naming `public` members of types, such as fields, properties, events, methods, and local functions.
 
-
 ```C#
 public class Example
 {
@@ -73,19 +122,38 @@ public class Example
 ```
 
 ### Route names
+
 Prefer using `kebab-casing` for route names.
 
 ```C#
 [HttpGet("get-all-blogs")]
 ```
 
-## Lambda expressions
-Use letter `x` as parameter name for lambda expressions.
+### Abbreviations and acronyms
 
-If you have nested lambdas, in inner lamdas use letters `y` and `z`.
+Avoid using **abbreviations**.  
+**Exceptions**: abbreviations commonly used as names, such as **Id**, **Xml**, **Uri**.
+
+When using acronyms only first letter is uppercase.
 
 ```C#
-// bad 
+// bad
+var personOIB = 01234567891;
+
+// good
+var personOib = 19876543210;
+```
+
+## Lambda expressions
+
+### Paramtere names
+
+Use letter `x` as parameter name for lambda expressions.
+
+If you have nested lambdas, in inner lambdas use letters `y` and `z`.
+
+```C#
+// bad
 var blogsWithPostRatingHigherThanThree = blogs
     .Where(b => b.Posts
         .Any(p => p.Rating > 3))
@@ -98,7 +166,9 @@ var blogsWithPostRatingHigherThanThree = blogs
     .ToList();
 ```
 
-If you invoke a chain of methods with lambda expressions, split each invocation onto its own line. 
+### Split chained methods with lambda expressions in separate line
+
+If you invoke a chain of methods with lambda expressions, split each invocation onto its own line.
 
 ```C#
 // bad
@@ -111,7 +181,10 @@ var evenNumbers = numbers
 ```
 
 ### LINQ conventions
-Use meaningful names for query variables. The following example uses zagrebCustomers for customers who are located in Zagreb.
+
+#### Use meaningful names for query variables
+
+The following example uses zagrebCustomers for customers who are located in Zagreb.
 
 ```C#
 var zagrebCustomers = await dbContext.Customers
@@ -119,7 +192,7 @@ var zagrebCustomers = await dbContext.Customers
     .ToListAsync();
 ```
 
-Separate multiple `&&` from one `Where` statement in multiple `Where` statements.
+#### Separate multiple `&&` from one `Where` statement in multiple `Where` statements.
 
 ```C#
 // bad
@@ -127,14 +200,14 @@ var filteredNumbers = numbers
     .Where(x => x % 7 == 0 && x > 200)
     .ToList();
 
-// good 
+// good
 var filteredNumbers = numbers
     .Where(x => x % 7 == 0)
     .Where(x => x > 200)
     .ToList();
 ```
 
-Use `Where` statement insted of writing condition in `Single`, or `First`.
+#### Use `Where` statement instead of writing condition in `Single`, or `First`.
 
 ```C#
 // bad
@@ -147,7 +220,7 @@ var numberDivisibleByTen = numbers
     .FirstOrDefault();
 ```
 
-Prefer using `async` LINQ query when querying database.
+#### Prefer using `async` LINQ query when querying database
 
 ```C#
 var blogs = await dbContext.Blogs
@@ -155,7 +228,7 @@ var blogs = await dbContext.Blogs
     .ToListAsync();
 ```
 
-Use `foreach` loop over LINQ foreach.
+#### Prefer using `foreach` loop over LINQ foreach
 
 ```C#
 // bad
@@ -168,9 +241,12 @@ foreach(var item in items)
 }
 ```
 
+#### Place `new` keyword in new line
+
 When creating new object instance in Select, add `new` keyword and class name to new line and indent it one `tab` more than `Select`.
 
 Example: Fetch Blog name and Author name.
+
 ```C#
 // bad
 // loading whole object from database and using Include
@@ -179,7 +255,7 @@ var blogs = await dbContetxt.Blogs
     .ToListAsync();
 
 var blogData = blogs
-    .Select(x => 
+    .Select(x =>
         new BlogData
         {
             Name = x.Name,
@@ -190,7 +266,7 @@ var blogData = blogs
 // bad
 // new keyword in the same line as Select
 var blogData = await dbContetxt.Blogs
-    .Select(x => new BlogData 
+    .Select(x => new BlogData
     {
         Name = x.Name,
         AuthorName = x.Author.FirstName
@@ -199,32 +275,70 @@ var blogData = await dbContetxt.Blogs
 
 // good
 var blogData = await dbContetxt.Blogs
-    .Select(x => 
+    .Select(x =>
         new BlogData
         {
             Name = x.Name,
             AuthorName = x.Author.FirstName
         })
     .ToListAsync();
-```  
+```
 
-From database only select data which will be used. There is no need to fetch whole object unless you are going to update it.
+#### From database only select data which will be used
+
+There is no need to fetch whole object unless you are going to update it.
 
 Avoid using `Include`. Use `Select` instead.
 
-Do not use `Single` when fetching entities by their `primary key` from database.
+#### Do not use `Single` when fetching entities by their `primary key` from database
 
 ## Layout conventions
 
-Use file scoped namespaces.
+### Use file scoped namespaces
 
-Write only one statement per line.
+```C#
+// bad
+namespace Api.Entity
+{
+    public class Example
+    {
+        ...
+    }
+}
 
-Write only one declaration per line.
+// good
+namespace Api.Entity;
 
-If continuation lines are not indented automatically, indent them one tab (four spaces).
+public class Example
+{
+    ...
+}
+```
 
-Use compound assignment.
+### Write only one statement per line
+
+```C#
+// bad
+blog1.Name = "blog1"; blog2.Name = "blog2";
+
+// good
+blog1.Name = "blog1";
+blog2.Name = "blog2";
+```
+
+### Write only one declaration per line
+
+```C#
+// bad
+var x = 0, y = 0;
+
+// good
+var x = 0;
+var y = 0;
+
+```
+
+### Use compound assignment
 
 ```C#
 // bad
@@ -234,7 +348,8 @@ x = x + 5;
 x += 5;
 ```
 
-Match namespaces to folder structure.
+### Match namespaces to folder structure
+
 ```C#
 // bad
 // file path: Example/Convention/C.cs
@@ -257,21 +372,25 @@ class C
 }
 ```
 
+### `using` directives
+
 Prefer `using` directives to be placed outside the namespace.
 
-Use simple `using` declaration over `using` statement with curly braces.
+Sort `System.*` `using` directives alphabetically, and place them before other using directives.
+
+### Use simple `using` declaration over `using` statement with curly braces
+
 ```C#
 // bad
-using (var a = b) 
+using (var a = b)
 {
     ...
 }
 
-// good 
+// good
 using var a = b;
 ```
 
-Sort `System.*` `using` directives alphabetically, and place them before other using directives.
 ```C#
 // bad
 using System.Collections.Generic;
@@ -284,14 +403,14 @@ using System.Threading.Tasks;
 using Octokit;
 ```
 
-Leave one blank line before return statement in method.
+### Leave one blank line before return statement in method
 
 ```C#
 // bad
 public int ReverseInteger(int number)
 {
     var reversedNumber = 0;
-    while (num > 0) 
+    while (num > 0)
     {
         reversedNumber = result * 10 + num % 10;
         num /= 10;
@@ -304,7 +423,7 @@ public int ReverseInteger(int number)
 {
     var reversedNumber = 0;
 
-    while (num > 0) 
+    while (num > 0)
     {
        reversedNumber = result * 10 + num % 10;
        num /= 10;
@@ -314,19 +433,18 @@ public int ReverseInteger(int number)
 }
 ```
 
-`Never` use 2 empty lines in a row.
+### `Never` use 2 empty lines in a row.
 
 ```C#
 // bad
 public int ReverseInteger(int number)
 {
     var reversedNumber = 0;
-    while (num > 0) 
+    while (num > 0)
     {
         reversedNumber = result * 10 + num % 10;
         num /= 10;
     }
-
 
     return reversedNumber;
 }
@@ -336,7 +454,7 @@ public int ReverseInteger(int number)
 {
     var reversedNumber = 0;
 
-    while (num > 0) 
+    while (num > 0)
     {
        reversedNumber = result * 10 + num % 10;
        num /= 10;
@@ -347,9 +465,10 @@ public int ReverseInteger(int number)
 
 ```
 
-Private methods should be last in file.
+### Private methods should be last in file
 
-Separate type members and methods with a single blank line, except private fields.
+### Separate type members and methods with a single blank line, except private fields
+
 ```C#
 // bad
 public class Blog
@@ -381,6 +500,8 @@ public class Blog
     }
 }
 ```
+
+### Separate code into logically-related blocks
 
 Use single blank lines to split method bodies into logically-related blocks.
 
@@ -413,15 +534,17 @@ if (y != 0)
 }
 ```
 
-Avoid using `else`. Always `return` before if possible. This reduces nesting and makes to code easier to follow.
+### Avoid using `else`
+
+Always `return` before if possible. This reduces nesting and makes to code easier to follow.
 
 ```C#
 // bad
-if (isValid) 
+if (isValid)
 {
     // Some code, happy path goes here
-} 
-else 
+}
+else
 {
    return; // or throw new Exception("not valid");
 }
@@ -434,6 +557,10 @@ if (!isValid)
 
 // Some code, happy path goes here
 ```
+
+### Indentation
+
+If continuation lines are not indented automatically, indent them one tab (four spaces).
 
 If a single statement must include a long chain or nested tree of sub-statements, split the line as follows:
 
@@ -448,7 +575,7 @@ if (blog.Rating > 3 || blog.Posts.Count() < 10 || blog.Author.Age < 30)
 }
 
 // good
-if (blog.Rating > 3 
+if (blog.Rating > 3
     || blog.Posts.Count() < 10
     || blog.Author.Age < 30)
 {
@@ -456,6 +583,7 @@ if (blog.Rating > 3
 ```
 
 Indent dotted invocations one level deeper than the root object. Place the dot for each invocation at the beginning of that line.
+
 ```C#
 // bad
 var blogsWithPostRatingHigherThanThree = blogs
@@ -468,27 +596,52 @@ var blogsWithPostRatingHigherThanThree = blogs
                                         .Where(x => x.Posts
                                             .Any(y => y.Rating > 3))
                                         .ToList();
-    
+
 // good
 var blogsWithPostRatingHigherThanThree = blogs
     .Where(x => x.Posts
         .Any(y => y.Rating > 3))
     .ToList();
 ```
-Create variables when you need them.
+
+### Create variables when you need them
+
+```C#
+// bad
+var blogName = blogs
+    .Where(x => x.Id == 1)
+    .Select(x => x.Name)
+    .First();
+
+// some lines of code
+
+var blogsWithSameName = blogs
+    .Where(x => x.Name == blogName)
+    .ToList();
+
+// good
+// some lines of code
+
+var blogName = blogs
+    .Where(x => x.Id == 1)
+    .Select(x => x.Name)
+    .First();
+
+var blogsWithSameName = blogs
+    .Where(x => x.Name == blogName)
+    .ToList();
+```
 
 ## MediatR conventions
 
-Use only one `SaveChanges` in handler.
+### Use only one `SaveChanges` in handler
 
 Services should not call `SaveChanges`. Handler should save all changes created in services.
 
-Throw exceptions instead of returning error codes or null in handler. 
+### Always validate request
 
-Always validate request.
+### Place `Handler`, `Request` and `Response` in the same file
 
-
-Place `Handler`, `Request` and `Response` in the same file.  
 Example: `UpdateBlogNameHandler.cs` file
 
 ```C#
@@ -510,7 +663,6 @@ public class UpdateBlogNameResponse
 }
 ```
 
-
 ## Braces
 
 When using object/collection intializer avoid using `()`.
@@ -525,10 +677,11 @@ var person = new Person()
 // good
 var person = new Person
 {
-    Name = "Name" 
+    Name = "Name"
 };
 ```
-When creating object, assing all properties in object initilaizer.
+
+When creating object, assign all properties in object initializer.
 
 ```C#
 // bad
@@ -561,9 +714,12 @@ if (x > 10)
 ```
 
 ## Other
-Always use implicit typing (`var`) for local variables.
 
-When you have complicated expression in if statement, it is better to add this expression to the varibale and name this variable accordingly.
+### Always use implicit typing (`var`) for local variables
+
+### Extract complicated expression to a variable
+
+When you have complicated expression in if statement, it is better to add this expression to the variable and name this variable accordingly.
 
 ```C#
 var list1AndList2ContainsSameElements = !list1.Except(list2).Any()
@@ -575,9 +731,9 @@ if (list1AndList2ContainsSameElements)
 }
 ```
 
-Use `foreach` loop over `for` loop when is possible.
+### Use `foreach` loop over `for` loop when is possible
 
-Avoid initalizing collections in loops. (`for`, `foreach`, `while`).
+### Avoid initializing collections in loops(`for`, `foreach`, `while`)
 
 ```C#
 // bad
@@ -599,14 +755,17 @@ foreach(var number in filteredList)
 }
 ```
 
-Alawys use `IOptions` to provide strongly typed access to groups of related settings.
+### IOptions
+
+Always use `IOptions` to provide strongly typed access to groups of related settings.
 
 `appsetting,json`
+
 ```C#
 {
   "MySettings": {
     "StringSetting": "My Value",
-    "IntSetting": 23 
+    "IntSetting": 23
   }
 }
 
@@ -616,7 +775,9 @@ public class MySettings
     public int IntSetting { get; set; }
 }
 ```
+
 In service configuration just add:
+
 ```C#
 public static class ServiceConfiguration
 {
@@ -629,6 +790,7 @@ public static class ServiceConfiguration
 ```
 
 Injecting in class:
+
 ```C#
 public class Example
 {
@@ -641,7 +803,8 @@ public class Example
 }
 ```
 
-Add changes to database context just before calling `SaveChanges`.
+### Add changes to database context just before calling `SaveChanges`
+
 ```C#
 // bad
 await context.Blogs.AddAsync(blog);
@@ -660,7 +823,9 @@ await context.Blogs.AddAsync(blog);
 await context.SaveChangesAsync();
 ```
 
-Avoid using helper lists. Use `Select` or method with `yield return` insted.
+### Avoid using helper lists
+
+Use `Select` or method with `yield return` instead.
 
 ```C#
 // bad
@@ -688,13 +853,14 @@ var blogsData = blogs
     .ToList();
 ```
 
-Do not add meanignless comments.
+### Do not add meaningless comments
+
 ```C#
 /// <param name="itemData">data for new item</param>
 /// <returns>success result</returns>
 ```
 
-Prefer null coalescing expressions to ternary operator checking.
+### Prefer null coalescing expressions to ternary operator checking
 
 ```C#
 // bad
@@ -705,7 +871,7 @@ var v = x == null ? y : x;
 var v = x ?? y;
 ```
 
-Prefer assignments and return statements to use a ternary conditional, over if-else statement.
+### Prefer assignments and return statements to use a ternary conditional, over if-else statement
 
 ```C#
 // bad
@@ -723,7 +889,8 @@ else
 var s = expr ? "hello" : "world";
 ```
 
-Prefer simplified conditional expressions.
+### Prefer simplified conditional expressions
+
 ```C#
 // bad
 var result1 = M1() && M2() ? true : false;
@@ -734,7 +901,8 @@ var result1 = M1() && M2();
 var result2 = M1() || M2();
 ```
 
-Prefer simplified interpolated strings.
+### Prefer simplified interpolated strings
+
 ```C#
 // bad
 var str = $"prefix {someValue.ToString()} suffix";
@@ -743,17 +911,20 @@ var str = $"prefix {someValue.ToString()} suffix";
 var str = $"prefix {someValue} suffix";
 ```
 
-Prefer fields **not** to be prefaced with `this.`.
+### Prefer fields **not** to be prefaced with `this.`
+
 ```C#
-// bad 
+// bad
 this._capacity = 0;
 
 // good
 _capacity = 0;
 ```
+
+### Git branch naming
+
 When naming git branches, include slash `/` for hierarchical (directory) grouping.
 
 Good : `fix/calculator-multiplication`
 
 Bad : `calculator-multiplication-fix`
-
