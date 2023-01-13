@@ -634,6 +634,14 @@ var blogsWithSameName = blogs
 
 ## MediatR conventions
 
+### CommandQuery naming
+
+Handlers should contain only Query and Command suffixed files.
+
+Example: `GetBlogsQuery` query file
+
+Example: `UpdateBlogNameCommand` command file
+
 ### Use only one `SaveChanges` in handler
 
 Services should not call `SaveChanges`. Handler should save all changes created in services.
@@ -642,12 +650,12 @@ Services should not call `SaveChanges`. Handler should save all changes created 
 
 ### Place `Handler`, `Request` and `Response` in the same file
 
-Example: `UpdateBlogNameHandler.cs` file
+Example: `UpdateBlogNameCommand.cs` file
 
 ```C#
 namespace Core.Handlers.Blog;
 
-public class UpdateBlogNameHandler : RequestHandler<UpdateBlogNameRequest, UpdateBlogNameResponse>
+public class UpdateBlogNameCommand : RequestHandler<UpdateBlogNameRequest, UpdateBlogNameResponse>
 {
     ...
 }
