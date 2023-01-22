@@ -146,7 +146,7 @@ var personOib = 19876543210;
 
 ## Lambda expressions
 
-### Paramtere names
+### Parameter names
 
 Use letter `x` as parameter name for lambda expressions.
 
