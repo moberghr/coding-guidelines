@@ -21,6 +21,11 @@ Key takeaways:
 	- no sideefects
 - TDD leads to simpler code
 
+## WAT - A lightning talk by Gary Bernhardt
+https://www.destroyallsoftware.com/talks/wat
+
+4 fun minutes about javascript.
+
 ## Talks by Kevlin Henney
 - Ch-ch-changes: A talk about humans and code - https://www.youtube.com/watch?v=5f-RMwTqKok
 - Structure and interpretation of test cases - https://www.youtube.com/watch?v=tWn8RA_DEic
