@@ -933,6 +933,6 @@ _capacity = 0;
 
 When naming git branches, include slash `/` for hierarchical (directory) grouping.
 
-Good : `fix/calculator-multiplication`
-
 Bad : `calculator-multiplication-fix`
+
+Good : `fix/calculator-multiplication`
